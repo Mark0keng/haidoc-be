@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Route
-app.use("/", authRoute);
-app.use("/product", productRoute);
+app.use("/api/", authRoute);
+app.use("/api/product", productRoute);
 
 app.listen(Port, () => {
   console.log(["Info"], `Server started on port ${Port}`);

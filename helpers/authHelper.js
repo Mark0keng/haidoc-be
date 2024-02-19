@@ -61,21 +61,21 @@ const login = async (dataObject) => {
 
     let userInfo = null;
 
-    if (user.role === 1) {
-      userInfo = await StudentHelper.getStudentByUserId(user.id);
-    }
+    // if (user.role === 1) {
+    //   userInfo = await StudentHelper.getStudentByUserId(user.id);
+    // }
 
-    if (user.role === 2) {
-      userInfo = await LecturerHelper.getLecturerByUserId(user.id);
-    }
+    // if (user.role === 2) {
+    //   userInfo = await LecturerHelper.getLecturerByUserId(user.id);
+    // }
 
     const token = __generateToken({
       id: user.id,
       username: user.username,
       email: user.email,
       role: user.role,
-      ...(user.role === 1 && { customer_id: userInfo.id }),
-      ...(user.role === 2 && { doctor_id: userInfo.id }),
+      // ...(user.role === 1 && { customer_id: userInfo.id }),
+      // ...(user.role === 2 && { doctor_id: userInfo.id }),
     });
 
     return Promise.resolve({ token });
