@@ -6,11 +6,11 @@ const path = require("path");
 const { cloudinaryDeleteImg } = require("../utils/cloudinary");
 
 const getAllProduct = async (query) => {
-  console.log(query.page);
   const result = await db.Product.findAndCountAll({
-    limit: query.limit ? Number(query.limit) : 5,
-    offset: query.page ? Number(query.page) * Number(query.limit) : 0,
+    limit: query.limit && Number(query.limit),
+    offset: query.page && Number(query.page) * Number(query.limit),
     where: {},
+    order: [["createdAt", "DESC"]],
   });
 
   if (_.isEmpty(result)) {
