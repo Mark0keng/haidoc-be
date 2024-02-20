@@ -5,8 +5,13 @@ const path = require("path");
 
 const { cloudinaryDeleteImg } = require("../utils/cloudinary");
 
-const getAllProduct = async () => {
-  const result = await db.Product.findAll();
+const getAllProduct = async (query) => {
+  console.log(query.page);
+  const result = await db.Product.findAndCountAll({
+    limit: query.limit ? Number(query.limit) : 5,
+    offset: query.page ? Number(query.page) * Number(query.limit) : 0,
+    where: {},
+  });
 
   if (_.isEmpty(result)) {
     return Promise.reject(Boom.notFound("Product Not Found"));

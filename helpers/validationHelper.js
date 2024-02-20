@@ -30,11 +30,12 @@ const productValidation = (data) => {
     name: Joi.string().required(),
     price: Joi.number().required(),
     description: Joi.string().required(),
-    concern: Joi.string().optional(),
+    concern: Joi.string().allow(""),
     consumption: Joi.string().required(),
     packaging: Joi.string().required(),
     manufacture: Joi.string().required(),
     categoryId: Joi.number().required(),
+    verifiedUser: Joi.object().required(),
   });
 
   if (schema.validate(data).error) {

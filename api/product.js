@@ -2,6 +2,8 @@ const Router = require("express").Router();
 const Boom = require("boom");
 const path = require("path");
 
+const authMiddleware = require("../middlewares/authMiddleware");
+
 const Validation = require("../helpers/validationHelper");
 const ProductHelper = require("../helpers/productHelper");
 const GeneralHelper = require("../helpers/generalHelper");
@@ -13,7 +15,8 @@ const uploadMedia = require("../middlewares/uploadMedia");
 
 const getAllProduct = async (req, res) => {
   try {
-    const data = await ProductHelper.getAllProduct(req.body);
+    console.log(req.query, "<<<");
+    const data = await ProductHelper.getAllProduct(req.query);
 
     return res.status(200).json({ message: "Successfully get data", data });
   } catch (err) {
@@ -84,7 +87,6 @@ const updateProduct = async (req, res) => {
 
     return res.status(200).json("Product successfully updated");
   } catch (err) {
-    console.log(err);
     return res
       .status(GeneralHelper.statusResponse(err))
       .send(GeneralHelper.errorResponse(err));
@@ -96,7 +98,7 @@ const deleteProduct = async (req, res) => {
     await ProductHelper.deleteProduct(req.params.id);
 
     return res.status(200).json("Product successfully deleted");
-} catch (err) {
+  } catch (err) {
     console.log(err);
     return res
       .status(GeneralHelper.statusResponse(err))
@@ -113,6 +115,7 @@ Router.post(
 Router.put(
   "/update/:id",
   uploadMedia.fields([{ name: "imageUrl", maxCount: 1 }]),
+  authMiddleware.validateToken,
   updateProduct
 );
 Router.delete("/delete/:id", deleteProduct);

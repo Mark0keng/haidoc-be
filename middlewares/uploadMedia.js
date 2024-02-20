@@ -6,7 +6,8 @@ const fileFilter = (req, file, cb) => {
   if (
     file.mimetype !== "image/jpeg" &&
     file.mimetype !== "image/jpg" &&
-    file.mimetype !== "image/png"
+    file.mimetype !== "image/png" &&
+    file.mimetype !== "image/webp"
   ) {
     req.fileValidationError = new Error(
       "Unsupported file type! Please upload only JPG, JPEG, or PNG images."

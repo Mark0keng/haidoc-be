@@ -28,12 +28,14 @@ const validateToken = (request, reply, next) => {
       throw Boom.unauthorized();
     }
 
-    request.user.verifiedUser = verifiedUser;
+    request.body.verifiedUser = verifiedUser;
 
     return next();
   } catch (err) {
     console.log([fileName, "validateToken", "ERROR"], { info: `${err}` });
-    return reply.send(GeneralHelper.errorResponse(err));
+    return reply
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
   }
 };
 
