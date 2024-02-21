@@ -15,12 +15,23 @@ const uploadMedia = require("../middlewares/uploadMedia");
 
 const getAllProduct = async (req, res) => {
   try {
-    console.log(req.query, "<<<");
     const data = await ProductHelper.getAllProduct(req.query);
 
     return res.status(200).json({ message: "Successfully get data", data });
   } catch (err) {
     return res.send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getProductById = async (req, res) => {
+  try {
+    const data = await ProductHelper.getProductById(req.params.id);
+
+    return res.status(200).json({ message: "Successfully get data", data });
+  } catch (err) {
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
   }
 };
 
@@ -107,9 +118,11 @@ const deleteProduct = async (req, res) => {
 };
 
 Router.get("/", getAllProduct);
+Router.get("/:id", getProductById);
 Router.post(
   "/create",
   uploadMedia.fields([{ name: "imageUrl", maxCount: 1 }]),
+  authMiddleware.validateToken,
   createProduct
 );
 Router.put(
@@ -118,6 +131,6 @@ Router.put(
   authMiddleware.validateToken,
   updateProduct
 );
-Router.delete("/delete/:id", deleteProduct);
+Router.delete("/delete/:id", authMiddleware.validateToken, deleteProduct);
 
 module.exports = Router;
