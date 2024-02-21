@@ -1,23 +1,24 @@
-const Boom = require("boom");
 const db = require("../models");
 const _ = require("lodash");
 
+const ProductHelper = require("../helpers/productHelper");
+const AuthHelper = require("../helpers/authHelper");
+
 const getCart = async (query) => {
-  const result = await db.Cart.findAndCountAll({
+  const result = await db.Cart.findOne({
     where: {
-      productId: query.productId && query.productId,
-      userId: query.userId && query.userId,
+      ...(query?.productId && { productId: query.productId }),
+      ...(query?.userId && { userId: query.userId }),
     },
   });
 
-  if (_.isEmpty(result)) {
-    return Promise.reject(Boom.notFound("Product Not Found"));
-  }
-
-  return Promise.resolve(result);
+  return Promise.resolve(result.dataValues);
 };
 
 const createCart = async (cart) => {
+  await AuthHelper.getProfile(cart.userId);
+  await ProductHelper.getProductById(cart.productId);
+
   const result = await db.Cart.create({
     productId: cart.productId,
     userId: cart.userId,
@@ -27,7 +28,24 @@ const createCart = async (cart) => {
   return Promise.resolve(result);
 };
 
+const updateCart = async (cart, cartId) => {
+  await AuthHelper.getProfile(cart.userId);
+  await ProductHelper.getProductById(cart.productId);
+
+  await db.Cart.update(
+    {
+      productId: cart.productId,
+      userId: cart.userId,
+      count: cart.count,
+    },
+    { where: { id: cartId } }
+  );
+
+  return Promise.resolve(true);
+};
+
 module.exports = {
   getCart,
   createCart,
+  updateCart,
 };

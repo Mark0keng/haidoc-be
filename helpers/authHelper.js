@@ -191,12 +191,16 @@ const changeForgotPassword = async (token, newPassword) => {
   });
 };
 
-const getProfile = async (email) => {
+const getProfile = async (id) => {
   const result = await db.User.findOne({
     where: {
-      email,
+      id,
     },
   });
+
+  if (_.isEmpty(result)) {
+    return Promise.reject(Boom.notFound("User Not Found"));
+  }
 
   return Promise.resolve(result);
 };

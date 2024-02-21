@@ -5,6 +5,18 @@ const Validation = require("../helpers/validationHelper");
 const AuthHelper = require("../helpers/authHelper");
 const GeneralHelper = require("../helpers/generalHelper");
 
+const getProfile = async (request, reply) => {
+  try {
+    const data = await AuthHelper.getProfile(request.query);
+
+    return reply.send(data);
+  } catch (err) {
+    return reply
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
 const register = async (request, reply) => {
   try {
     Validation.registerValidation(request.body);
@@ -41,6 +53,7 @@ const login = async (request, reply) => {
   }
 };
 
+Router.get("/get-profile", getProfile);
 Router.post("/register", register);
 Router.post("/login", login);
 
