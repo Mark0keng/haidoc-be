@@ -12,7 +12,26 @@ const getCart = async (query) => {
     },
   });
 
-  return Promise.resolve(result.dataValues);
+  return Promise.resolve(result?.dataValues);
+};
+
+const getManyCart = async (query) => {
+  console.log(query);
+  const result = await db.Cart.findAll({
+    where: {
+      ...(query?.productId && { productId: query.productId }),
+      ...(query?.userId && { userId: query.userId }),
+    },
+    include: [
+      {
+        model: db.Product,
+        as: "products",
+        attributes: ["imageUrl", "name", "price", "packaging"],
+      },
+    ],
+  });
+
+  return Promise.resolve(result);
 };
 
 const createCart = async (cart) => {
@@ -46,6 +65,7 @@ const updateCart = async (cart, cartId) => {
 
 module.exports = {
   getCart,
+  getManyCart,
   createCart,
   updateCart,
 };

@@ -13,6 +13,18 @@ const getCart = async (req, res) => {
 
     return res.status(200).json({ message: "Successfully get data", data });
   } catch (err) {
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getManyCart = async (req, res) => {
+  try {
+    const data = await CartHelper.getManyCart(req.query);
+
+    return res.status(200).json({ message: "Successfully get data", data });
+  } catch (err) {
     console.log(err);
     return res.status(500).send(GeneralHelper.errorResponse(err));
   }
@@ -49,6 +61,7 @@ const createCart = async (req, res) => {
 };
 
 Router.get("/", authMiddleware.validateToken, getCart);
+Router.get("/all", authMiddleware.validateToken, getManyCart);
 Router.post("/create", authMiddleware.validateToken, createCart);
 
 module.exports = Router;
