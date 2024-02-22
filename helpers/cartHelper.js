@@ -7,6 +7,7 @@ const AuthHelper = require("../helpers/authHelper");
 const getCart = async (query) => {
   const result = await db.Cart.findOne({
     where: {
+      ...(query?.id && { id: query.id }),
       ...(query?.productId && { productId: query.productId }),
       ...(query?.userId && { userId: query.userId }),
     },
@@ -15,12 +16,11 @@ const getCart = async (query) => {
   return Promise.resolve(result?.dataValues);
 };
 
-const getManyCart = async (query) => {
-  console.log(query);
+const getUserCart = async (query) => {
   const result = await db.Cart.findAll({
     where: {
-      ...(query?.productId && { productId: query.productId }),
-      ...(query?.userId && { userId: query.userId }),
+      ...(query?.productId && { productId: Number(query.productId) }),
+      ...(query?.userId && { userId: Number(query.userId) }),
     },
     include: [
       {
@@ -47,7 +47,7 @@ const createCart = async (cart) => {
   return Promise.resolve(result);
 };
 
-const updateCart = async (cart, cartId) => {
+const updateCart = async (cart, id) => {
   await AuthHelper.getProfile(cart.userId);
   await ProductHelper.getProductById(cart.productId);
 
@@ -57,7 +57,7 @@ const updateCart = async (cart, cartId) => {
       userId: cart.userId,
       count: cart.count,
     },
-    { where: { id: cartId } }
+    { where: { id } }
   );
 
   return Promise.resolve(true);
@@ -65,7 +65,7 @@ const updateCart = async (cart, cartId) => {
 
 module.exports = {
   getCart,
-  getManyCart,
+  getUserCart,
   createCart,
   updateCart,
 };
