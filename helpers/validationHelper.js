@@ -46,9 +46,10 @@ const productValidation = (data) => {
 const addressValidation = (data) => {
   const schema = Joi.object({
     userId: Joi.number().required(),
-    provinceId: Joi.number().required(),
-    cityId: Joi.number().required(),
-    fullAddress: Joi.number().required(),
+    provinceId: Joi.number().disallow("").required().label("province"),
+    cityId: Joi.number().disallow("").required().label("city"),
+    fullAddress: Joi.string().allow(""),
+    verifiedUser: Joi.object().required(),
   });
 
   if (schema.validate(data).error) {

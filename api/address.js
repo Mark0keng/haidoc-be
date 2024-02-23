@@ -23,9 +23,8 @@ const getProvince = async (req, res) => {
       data: response?.data?.rajaongkir?.results,
     });
   } catch (err) {
-    return res
-      .status(err.output.statusCode)
-      .send(GeneralHelper.errorResponse(err));
+    console.log(err);
+    return res.status(500).send(GeneralHelper.errorResponse(err));
   }
 };
 
@@ -38,9 +37,45 @@ const getCity = async (req, res) => {
       data: response?.data?.rajaongkir?.results,
     });
   } catch (err) {
-    return res
-      .status(err.output.statusCode)
-      .send(GeneralHelper.errorResponse(err));
+    console.log(err);
+    return res.status(500).send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getShippingCost = async (req, res) => {
+  try {
+    console.log(req.query, "<<<");
+    const response = await axios.post(`/cost`, {
+      origin: Number(req.query.origin),
+      destination: Number(req.query.destination),
+      weight: Number(req.query.weight),
+      courier: req.query.courier,
+    });
+
+    return res.status(200).json({
+      message: "Successfully get data",
+      data: response?.data?.rajaongkir,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const getAddress = async (req, res) => {
+  try {
+    const data = await AddressHelper.getAddress({
+      userId: req?.body?.verifiedUser?.id,
+      ...req.query,
+    });
+
+    return res.status(200).json({
+      message: "Successfully get data",
+      data,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(GeneralHelper.errorResponse(err));
   }
 };
 
@@ -67,8 +102,33 @@ const createAddress = async (req, res) => {
   }
 };
 
+const updateAddress = async (req, res) => {
+  try {
+    Validation.addressValidation({
+      userId: req?.body?.verifiedUser?.id,
+      ...req.body,
+    });
+
+    const data = await AddressHelper.updateAddress({
+      userId: req?.body?.verifiedUser?.id,
+      ...req.body,
+    });
+
+    return res.status(200).json({
+      message: "Successfully get data",
+      data,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(GeneralHelper.errorResponse(err));
+  }
+};
+
 Router.get("/province", getProvince);
 Router.get("/city", getCity);
+Router.get("/shipping-cost", getShippingCost);
+Router.get("/", authMiddleware.validateToken, getAddress);
 Router.post("/create", authMiddleware.validateToken, createAddress);
+Router.put("/update", authMiddleware.validateToken, updateAddress);
 
 module.exports = Router;
