@@ -43,26 +43,10 @@ const createCart = async (req, res) => {
       userId: req.body.verifiedUser.id,
     });
 
-    const cart = await CartHelper.getCart({
+    const data = await CartHelper.createCart({
       userId: req.body.verifiedUser.id,
       ...req.body,
     });
-
-    if (cart) {
-      const data = await CartHelper.updateCart(
-        {
-          ...cart,
-          count: cart.count + 1,
-        },
-        cart.id
-      );
-
-      return res
-        .status(200)
-        .json({ message: "Successfully create data", data });
-    }
-
-    const data = await CartHelper.createCart(req.body);
 
     return res.status(200).json({ message: "Successfully create data", data });
   } catch (err) {
@@ -89,9 +73,27 @@ const updateCart = async (req, res) => {
   }
 };
 
+const deleteCart = async (req, res) => {
+  try {
+    const cart = await CartHelper.getCart(req.params);
+    if (_.isEmpty(cart)) {
+      return Promise.reject(Boom.notFound("Item Not Found"));
+    }
+
+    await CartHelper.deleteCart(req.params.id);
+
+    return res.status(200).json({ message: "Successfully delete data" });
+  } catch (err) {
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
 Router.get("/", authMiddleware.validateToken, getCart);
 Router.get("/user", authMiddleware.validateToken, getUserCart);
 Router.post("/create", authMiddleware.validateToken, createCart);
 Router.put("/update/:id", authMiddleware.validateToken, updateCart);
+Router.delete("/delete/:id", authMiddleware.validateToken, deleteCart);
 
 module.exports = Router;

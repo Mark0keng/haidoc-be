@@ -63,9 +63,16 @@ const updateCart = async (cart, id) => {
   return Promise.resolve(true);
 };
 
+const deleteCart = async (id) => {
+  await db.Cart.destroy({ where: { id } });
+
+  return Promise.resolve(true);
+};
+
 module.exports = {
   getCart,
   getUserCart,
   createCart,
   updateCart,
+  deleteCart,
 };
