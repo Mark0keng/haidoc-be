@@ -9,6 +9,8 @@ const getAddress = async (query) => {
     },
   });
 
+  console.log(result);
+
   if (_.isEmpty(result)) {
     return Promise.reject(Boom.notFound("User address not found"));
   }

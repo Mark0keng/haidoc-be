@@ -70,10 +70,39 @@ const cartValidation = (data) => {
   }
 };
 
+const orderValidation = (data) => {
+  const schema = Joi.object({
+    orderId: Joi.string().required(),
+    grossAmount: Joi.number().required(),
+    userId: Joi.number().required(),
+    verifiedUser: Joi.object().required(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
+const orderItemValidation = (data) => {
+  const schema = Joi.object({
+    orderId: Joi.string().required(),
+    productName: Joi.string().required(),
+    productPrice: Joi.number().required(),
+    count: Joi.number().required(),
+    verifiedUser: Joi.object().required(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
   productValidation,
   addressValidation,
   cartValidation,
+  orderValidation,
+  orderItemValidation,
 };
