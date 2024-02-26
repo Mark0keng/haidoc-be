@@ -47,7 +47,31 @@ const createOrder = async (req, res) => {
   }
 };
 
+const updateOrder = async (req, res) => {
+  try {
+    Validation.orderValidation({
+      ...req.body,
+      userId: req.body.verifiedUser.id,
+    });
+
+    const data = await OrderHelper.updateOrder(
+      {
+        ...req.body,
+        userId: req.body.verifiedUser.id,
+      },
+      req.params.id
+    );
+
+    return res.status(200).json({ message: "Successfully create data", data });
+  } catch (err) {
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
 Router.get("/user", authMiddleware.validateToken, getUserOrder);
 Router.post("/create", authMiddleware.validateToken, createOrder);
+Router.put("/update/:id", authMiddleware.validateToken, updateOrder);
 
 module.exports = Router;

@@ -31,7 +31,23 @@ const createOrder = async (order) => {
   return Promise.resolve(result);
 };
 
+const updateOrder = async (order, id) => {
+  await db.Order.update(
+    {
+      orderId: order.orderId,
+      grossAmount: order.grossAmount,
+      shippingCost: order.shippingCost,
+      userId: order.userId,
+      status: order.status,
+    },
+    { where: { id } }
+  );
+
+  return Promise.resolve(true);
+};
+
 module.exports = {
   createOrder,
   getUserOrder,
+  updateOrder,
 };

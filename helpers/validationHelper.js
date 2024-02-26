@@ -89,7 +89,9 @@ const orderValidation = (data) => {
   const schema = Joi.object({
     orderId: Joi.string().required(),
     grossAmount: Joi.number().required(),
+    shippingCost: Joi.number().required(),
     userId: Joi.number().required(),
+    status: Joi.string().required(),
     verifiedUser: Joi.object().required(),
   });
 
