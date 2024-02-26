@@ -9,14 +9,17 @@ const AddressHelper = require("../helpers/addressHelper");
 
 dotenv.config();
 
-axios.defaults.baseURL = "https://api.rajaongkir.com/starter";
-axios.defaults.headers.common["key"] = process.env.RAJAONGKIR_API_KEY;
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded";
-
 const getProvince = async (req, res) => {
   try {
-    const response = await axios.get("/province");
+    const response = await axios.get(
+      "https://api.rajaongkir.com/starter/province",
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          key: process.env.RAJAONGKIR_API_KEY,
+        },
+      }
+    );
 
     return res.status(200).json({
       message: "Successfully get data",
@@ -30,7 +33,15 @@ const getProvince = async (req, res) => {
 
 const getCity = async (req, res) => {
   try {
-    const response = await axios.get(`/city?province=${req?.query?.province}`);
+    const response = await axios.get(
+      `https://api.rajaongkir.com/starter/city?province=${req?.query?.province}`,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          key: process.env.RAJAONGKIR_API_KEY,
+        },
+      }
+    );
 
     return res.status(200).json({
       message: "Successfully get data",
@@ -44,13 +55,21 @@ const getCity = async (req, res) => {
 
 const getShippingCost = async (req, res) => {
   try {
-    console.log(req.query, "<<<");
-    const response = await axios.post(`/cost`, {
-      origin: Number(req.query.origin),
-      destination: Number(req.query.destination),
-      weight: Number(req.query.weight),
-      courier: req.query.courier,
-    });
+    const response = await axios.post(
+      `https://api.rajaongkir.com/starter/cost`,
+      {
+        origin: Number(req.query.origin),
+        destination: Number(req.query.destination),
+        weight: Number(req.query.weight),
+        courier: req.query.courier,
+      },
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          key: process.env.RAJAONGKIR_API_KEY,
+        },
+      }
+    );
 
     return res.status(200).json({
       message: "Successfully get data",

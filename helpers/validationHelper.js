@@ -43,6 +43,21 @@ const productValidation = (data) => {
   }
 };
 
+const doctorValidation = (data) => {
+  const schema = Joi.object({
+    fullname: Joi.string().required(),
+    specialist: Joi.number().required(),
+    experience: Joi.number().required(),
+    alumnus: Joi.string().required(),
+    strId: Joi.string().required(),
+    verifiedUser: Joi.object().required(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 const addressValidation = (data) => {
   const schema = Joi.object({
     userId: Joi.number().required(),
@@ -101,6 +116,7 @@ module.exports = {
   registerValidation,
   loginValidation,
   productValidation,
+  doctorValidation,
   addressValidation,
   cartValidation,
   orderValidation,
