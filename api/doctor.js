@@ -2,11 +2,25 @@ const Router = require("express").Router();
 const Boom = require("boom");
 
 const authMiddleware = require("../middlewares/authMiddleware");
+const {
+  uploadToCloudinary,
+  cloudinaryDeleteImg,
+} = require("../utils/cloudinary");
 
 const Validation = require("../helpers/validationHelper");
 const DoctorHelper = require("../helpers/doctorHelper");
 const GeneralHelper = require("../helpers/generalHelper");
 const uploadMedia = require("../middlewares/uploadMedia");
+
+const getDoctor = async (req, res) => {
+  try {
+    const data = await DoctorHelper.getDoctor(req.query);
+
+    return res.status(200).json({ message: "Successfully get data", data });
+  } catch (err) {
+    return res.send(GeneralHelper.errorResponse(err));
+  }
+};
 
 const createDoctor = async (req, res) => {
   let imageResult;
@@ -39,6 +53,7 @@ const createDoctor = async (req, res) => {
   }
 };
 
+Router.get("/", getDoctor);
 Router.post(
   "/create",
   authMiddleware.validateToken,

@@ -206,6 +206,7 @@ const getProfile = async (id) => {
 };
 
 module.exports = {
+  __hashPassword,
   registerUser,
   login,
   getProfile,
