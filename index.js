@@ -15,6 +15,7 @@ const orderItemRoute = require("./api/orderItem");
 const paymentRoute = require("./api/payment");
 const doctorRoute = require("./api/doctor");
 const chatRoute = require("./api/chat");
+const messageRoute = require("./api/message");
 
 app.use(cors());
 app.use(express.json());
@@ -30,6 +31,7 @@ app.use("/api/order-item", orderItemRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/doctor", doctorRoute);
 app.use("/api/chat", chatRoute);
+app.use("/api/message", messageRoute);
 
 const server = app.listen(Port, () => {
   console.log(["Info"], `Server started on port ${Port}`);
@@ -51,7 +53,7 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", (data) => {
     console.log(data);
-    socket.to(data.room).emit("receive_message", data);
+    socket.to(data.roomId).emit("receive_message", data);
   });
 
   socket.on("disconnected", () => {

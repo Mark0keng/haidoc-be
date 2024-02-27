@@ -4,7 +4,6 @@ const _ = require("lodash");
 const AuthHelper = require("../helpers/authHelper");
 
 const getChat = async (query) => {
-  console.log(query);
   const result = await db.Chat.findAll({
     where: {
       ...(query?.roomId && { roomId: query.roomId }),

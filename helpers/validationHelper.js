@@ -127,12 +127,27 @@ const chatValidation = (data) => {
   }
 };
 
+const messageValidation = (data) => {
+  const schema = Joi.object({
+    roomId: Joi.string().required(),
+    senderId: Joi.number().required(),
+    message: Joi.string().required(),
+    time: Joi.date().required(),
+    verifiedUser: Joi.object().required(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
   productValidation,
   doctorValidation,
   chatValidation,
+  messageValidation,
   addressValidation,
   cartValidation,
   orderValidation,
