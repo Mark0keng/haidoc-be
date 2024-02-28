@@ -39,6 +39,38 @@ const validateToken = (request, reply, next) => {
   }
 };
 
+const isAdmin = (request, reply, next) => {
+  try {
+    if (request.body.verifiedUser.role !== 3) {
+      throw Boom.forbidden();
+    }
+
+    return next();
+  } catch (err) {
+    console.log([fileName, "isAdmin", "ERROR"], { info: `${err}` });
+    return reply
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const isDoctor = (request, reply, next) => {
+  try {
+    if (request.body.verifiedUser.role !== 2) {
+      throw Boom.forbidden();
+    }
+
+    return next();
+  } catch (err) {
+    console.log([fileName, "validateToken", "ERROR"], { info: `${err}` });
+    return reply
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
 module.exports = {
   validateToken,
+  isAdmin,
+  isDoctor,
 };

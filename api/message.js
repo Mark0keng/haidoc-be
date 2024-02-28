@@ -18,6 +18,18 @@ const getMessage = async (req, res) => {
   }
 };
 
+const getLatestMessage = async (req, res) => {
+  try {
+    const data = await MessageHelper.getLatestMessage(req.query);
+
+    return res.status(200).json({ message: "Successfully get data", data });
+  } catch (err) {
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
 const createMessage = async (req, res) => {
   try {
     Validation.messageValidation(req.body);
@@ -33,6 +45,7 @@ const createMessage = async (req, res) => {
 };
 
 Router.get("/", authMiddleware.validateToken, getMessage);
+Router.get("/latest", authMiddleware.validateToken, getLatestMessage);
 Router.post("/create", authMiddleware.validateToken, createMessage);
 
 module.exports = Router;

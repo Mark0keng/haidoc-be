@@ -123,14 +123,21 @@ Router.post(
   "/create",
   uploadMedia.fields([{ name: "imageUrl", maxCount: 1 }]),
   authMiddleware.validateToken,
+  authMiddleware.isAdmin,
   createProduct
 );
 Router.put(
   "/update/:id",
   uploadMedia.fields([{ name: "imageUrl", maxCount: 1 }]),
   authMiddleware.validateToken,
+  authMiddleware.isAdmin,
   updateProduct
 );
-Router.delete("/delete/:id", authMiddleware.validateToken, deleteProduct);
+Router.delete(
+  "/delete/:id",
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  deleteProduct
+);
 
 module.exports = Router;

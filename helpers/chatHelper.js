@@ -10,6 +10,25 @@ const getChat = async (query) => {
       ...(query?.doctorId && { doctorId: query.doctorId }),
       ...(query?.clientId && { clientId: query.clientId }),
     },
+    include: [
+      {
+        model: db.Doctor,
+        as: "doctor",
+        attributes: ["imageUrl", "fullName", "userId"],
+      },
+      {
+        model: db.User,
+        as: "client",
+        attributes: ["username", "id"],
+      },
+      {
+        model: db.Message,
+        as: "latestMessage",
+        attributes: ["message", "time"],
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+      },
+    ],
   });
 
   return Promise.resolve(result);

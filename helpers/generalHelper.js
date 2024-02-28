@@ -22,6 +22,8 @@ const errorResponse = (error) => {
     switch (error.output.payload.statusCode) {
       case 422:
         return Boom.badData(error.output.payload.message, data);
+      case 403:
+        return Boom.forbidden(error.output.payload.message, data);
       case 404:
         return Boom.notFound(error.output.payload.message, data);
       case 400:
