@@ -33,9 +33,12 @@ const validateToken = (request, reply, next) => {
     return next();
   } catch (err) {
     console.log([fileName, "validateToken", "ERROR"], { info: `${err}` });
-    return reply
-      .status(err.output.statusCode)
-      .send(GeneralHelper.errorResponse(err));
+    console.log(err);
+    return (
+      reply
+        // .status(err.output.statusCode)
+        .send(GeneralHelper.errorResponse(err))
+    );
   }
 };
 

@@ -2,14 +2,19 @@ const Boom = require("boom");
 const db = require("../models");
 const _ = require("lodash");
 const path = require("path");
+const { Op } = require("sequelize");
 
 const { cloudinaryDeleteImg } = require("../utils/cloudinary");
 
 const getAllProduct = async (query) => {
   const result = await db.Product.findAndCountAll({
+    where: {
+      ...(query?.name && {
+        name: { [Op.like]: `%${query.name}%` },
+      }),
+    },
     limit: query.limit && Number(query.limit),
     offset: query.page && Number(query.page) * Number(query.limit),
-    where: {},
     order: [["createdAt", "DESC"]],
   });
 

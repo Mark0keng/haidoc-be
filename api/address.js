@@ -1,11 +1,14 @@
 const Router = require("express").Router();
 const axios = require("axios");
 const dotenv = require("dotenv");
+const _ = require("lodash");
 
 const authMiddleware = require("../middlewares/authMiddleware");
 const Validation = require("../helpers/validationHelper");
 const GeneralHelper = require("../helpers/generalHelper");
 const AddressHelper = require("../helpers/addressHelper");
+const { getKey, setKey } = require("../services/redis");
+const { json } = require("sequelize");
 
 dotenv.config();
 
@@ -33,6 +36,18 @@ const getProvince = async (req, res) => {
 
 const getCity = async (req, res) => {
   try {
+    const cityData = await getKey({
+      key: `cityProvince-${req?.query?.province}`,
+      isErrorOptional: true,
+    });
+
+    if (cityData) {
+      return res.status(200).json({
+        message: "Successfully get data",
+        data: JSON.parse(cityData),
+      });
+    }
+
     const response = await axios.get(
       `https://api.rajaongkir.com/starter/city?province=${req?.query?.province}`,
       {
@@ -42,6 +57,12 @@ const getCity = async (req, res) => {
         },
       }
     );
+
+    await setKey({
+      key: `cityProvince-${req?.query?.province}`,
+      value: JSON.stringify(response?.data?.rajaongkir?.results),
+      isSetExpired: true,
+    });
 
     return res.status(200).json({
       message: "Successfully get data",

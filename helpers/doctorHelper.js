@@ -1,10 +1,13 @@
 const Boom = require("boom");
 const db = require("../models");
+const { Op } = require("sequelize");
 
 const getDoctor = async (query) => {
   const result = await db.Doctor.findAll({
     where: {
-      ...(query?.fullName && { fullName: query.fullName }),
+      ...(query?.fullName && {
+        fullName: { [Op.like]: `%${query.fullName}%` },
+      }),
       ...(query?.specialist && { specialist: query.specialist }),
     },
     include: [

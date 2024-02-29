@@ -2,6 +2,7 @@ const db = require("../models");
 const _ = require("lodash");
 
 const AuthHelper = require("../helpers/authHelper");
+const Boom = require("boom");
 
 const getChat = async (query) => {
   const result = await db.Chat.findAll({
@@ -37,6 +38,10 @@ const getChat = async (query) => {
 const createChat = async (chat) => {
   await AuthHelper.getProfile(chat.doctorId);
   await AuthHelper.getProfile(chat.clientId);
+
+  if (chat.doctorId === chat.clientId) {
+    return Promise.reject(Boom.badRequest("Same user cannot chat"));
+  }
 
   const result = await db.Chat.create({
     roomId: chat.roomId,
