@@ -50,6 +50,7 @@ const doctorValidation = (data) => {
     experience: Joi.number().required(),
     alumnus: Joi.string().required(),
     strId: Joi.string().required(),
+    cost: Joi.number().required(),
     userId: Joi.number().required(),
   });
 

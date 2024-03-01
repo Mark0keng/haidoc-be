@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const db = require("../models");
 
 const jwtSecretToken = process.env.JWT_SECRET_TOKEN || "super_strong_key";
-const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "24h";
+const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "240h";
 const salt = bcrypt.genSaltSync(10);
 
 const __hashPassword = (password) => {

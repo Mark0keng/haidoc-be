@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.09% </span>
+                <span class="strong">60.31% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/63</span>
+                <span class='fraction'>38/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">31.25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>5/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/5</span>
+                <span class='fraction'>3/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">61.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>24/60</span>
+                <span class='fraction'>37/60</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -222,10 +222,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -245,31 +245,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -364,11 +364,11 @@ const {
 } = require("../utils/cloudinary");
 const uploadMedia = require("../middlewares/uploadMedia");
 &nbsp;
-const getAllProduct = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const data = <span class="cstat-no" title="statement not covered" >await ProductHelper.getAllProduct(req.query);</span>
+const getAllProduct = async (req, res) =&gt; {
+  try {
+    const data = await ProductHelper.getAllProduct(req.query);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return res.status(200).json({ message: "Successfully get data", data });</span>
+    return res.status(200).json({ message: "Successfully get data", data });
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    return res.send(GeneralHelper.errorResponse(err));</span>
   }
@@ -386,33 +386,33 @@ const getProductById = async (req, res) =&gt; {
   }
 };
 &nbsp;
-const createProduct = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+const createProduct = async (req, res) =&gt; {
   let imageResult;
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    if (req?.fileValidationError)</span>
+  try {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (req?.fileValidationError)
 <span class="cstat-no" title="statement not covered" >      throw Boom.badRequest(req.fileValidationError.message);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!req?.files?.imageUrl) <span class="cstat-no" title="statement not covered" >throw Boom.badRequest("Image is required");</span></span>
+    if (!req?.files?.imageUrl) throw Boom.badRequest("Image is required");
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    Validation.productValidation(req.body);</span>
+    Validation.productValidation(req.body);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    imageResult = await uploadToCloudinary(req.files.imageUrl[0], "image");</span>
+    imageResult = await uploadToCloudinary(req.files.imageUrl[0], "image");
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!imageResult?.url) <span class="cstat-no" title="statement not covered" >throw Boom.badImplementation(imageResult.error);</span></span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!imageResult?.url) <span class="cstat-no" title="statement not covered" >throw Boom.badImplementation(imageResult.error);</span>
 &nbsp;
-    const response = <span class="cstat-no" title="statement not covered" >await ProductHelper.createProduct({</span>
+    const response = await ProductHelper.createProduct({
       ...req.body,
       imageUrl: imageResult?.url,
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return res</span>
-      .status(200)
+    return res
+      .status(201)
       .json({ message: "Product successfully created", data: response });
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    if (imageResult?.public_id) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (imageResult?.public_id) {
 <span class="cstat-no" title="statement not covered" >      await cloudinaryDeleteImg(imageResult.public_id, "image");</span>
     }
-<span class="cstat-no" title="statement not covered" >    return res</span>
+    return res
       .status(GeneralHelper.statusResponse(err))
       .send(GeneralHelper.errorResponse(err));
   }
@@ -499,7 +499,7 @@ module.exports = Router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-29T07:48:07.909Z
+                at 2024-03-01T08:44:28.768Z
             </div>
         <script src="../prettify.js"></script>
         <script>

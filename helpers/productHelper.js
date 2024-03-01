@@ -34,7 +34,7 @@ const getProductById = async (id) => {
     return Promise.reject(Boom.notFound("Product Not Found"));
   }
 
-  return Promise.resolve(result.dataValues);
+  return Promise.resolve(result);
 };
 
 const createProduct = async (product) => {
