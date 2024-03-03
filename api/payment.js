@@ -5,19 +5,36 @@ const Boom = require("boom");
 const authMiddleware = require("../middlewares/authMiddleware");
 
 const OrderHelper = require("../helpers/orderHelper");
+const ChatOrderHelper = require("../helpers/chatOrderHelper");
 const GeneralHelper = require("../helpers/generalHelper");
 
 const getPayment = async (req, res) => {
   try {
-    const orderExist = await OrderHelper.getUserOrder({
-      ...req.query,
-      userId: req.body.verifiedUser.id,
-    });
-    if (orderExist.length < 1) {
-      return Promise.reject(Boom.notFound("Order Not Found"));
+    let order;
+
+    if (req?.query?.category === "shop") {
+      const shopOrder = await OrderHelper.getUserOrder({
+        ...req.query,
+        userId: req.body.verifiedUser.id,
+      });
+      if (shopOrder.length < 1) {
+        return Promise.reject(Boom.notFound("Order Not Found"));
+      }
+
+      order = shopOrder[0];
     }
 
-    const order = orderExist[0];
+    if (req?.query?.category === "chat") {
+      const chatOrder = await ChatOrderHelper.getUserChatOrder({
+        ...req.query,
+        clientId: req.body.verifiedUser.id,
+      });
+      if (chatOrder.length < 1) {
+        return Promise.reject(Boom.notFound("Order Not Found"));
+      }
+
+      order = chatOrder[0];
+    }
 
     const requestPayment = await axios({
       url: "https://app.sandbox.midtrans.com/snap/v1/transactions",
@@ -35,10 +52,6 @@ const getPayment = async (req, res) => {
         credit_card: {
           secure: true,
         },
-        // customer_details: {
-        //   first_name: order?.user?.username,
-        //   email: order?.user?.email,
-        // },
       },
     });
 

@@ -34,7 +34,25 @@ const createChat = async (req, res) => {
   }
 };
 
+const deleteChat = async (req, res) => {
+  try {
+    const data = await ChatHelper.deleteChat(req.params.id);
+
+    return res.status(200).json({ message: "Successfully delete data", data });
+  } catch (err) {
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
 Router.get("/", authMiddleware.validateToken, getChat);
 Router.post("/create", authMiddleware.validateToken, createChat);
+Router.delete(
+  "/delete/:id",
+  authMiddleware.validateToken,
+  authMiddleware.isDoctor,
+  deleteChat
+);
 
 module.exports = Router;

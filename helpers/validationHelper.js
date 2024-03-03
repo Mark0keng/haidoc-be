@@ -25,6 +25,28 @@ const loginValidation = (data) => {
   }
 };
 
+const forgotPasswordValidation = (data) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
+const changeForgotPasswordValidation = (data) => {
+  const schema = Joi.object({
+    password: Joi.string().required(),
+    confirmPassword: Joi.string().required(),
+    token: Joi.string().required(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 const productValidation = (data) => {
   const schema = Joi.object({
     name: Joi.string().required(),
@@ -115,6 +137,23 @@ const orderItemValidation = (data) => {
   }
 };
 
+const chatOrderValidation = (data) => {
+  const schema = Joi.object({
+    orderId: Joi.string().required(),
+    grossAmount: Joi.number().required(),
+    chatCost: Joi.number().required(),
+    serviceCost: Joi.number().required(),
+    doctorId: Joi.number().required(),
+    clientId: Joi.number().required(),
+    status: Joi.string().required(),
+    verifiedUser: Joi.object().required(),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 const chatValidation = (data) => {
   const schema = Joi.object({
     roomId: Joi.string().required(),
@@ -145,12 +184,15 @@ const messageValidation = (data) => {
 module.exports = {
   registerValidation,
   loginValidation,
+  forgotPasswordValidation,
+  changeForgotPasswordValidation,
   productValidation,
   doctorValidation,
   chatValidation,
   messageValidation,
   addressValidation,
   cartValidation,
+  chatOrderValidation,
   orderValidation,
   orderItemValidation,
 };

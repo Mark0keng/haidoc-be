@@ -15,7 +15,7 @@ const getChat = async (query) => {
       {
         model: db.Doctor,
         as: "doctor",
-        attributes: ["imageUrl", "fullName", "userId"],
+        attributes: ["imageUrl", "fullName", "userId", "specialist"],
       },
       {
         model: db.User,
@@ -52,7 +52,28 @@ const createChat = async (chat) => {
   return Promise.resolve(result);
 };
 
+const deleteChat = async (id) => {
+  const chatData = await db.Chat.findOne({
+    where: {
+      id,
+    },
+  });
+
+  if (_.isEmpty(chatData)) {
+    return Promise.reject(Boom.notFound("Chat Not Found"));
+  }
+
+  const result = await db.Chat.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return Promise.resolve(result);
+};
+
 module.exports = {
   getChat,
   createChat,
+  deleteChat,
 };

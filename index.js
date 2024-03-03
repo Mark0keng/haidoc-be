@@ -14,6 +14,7 @@ const orderRoute = require("./api/order");
 const orderItemRoute = require("./api/orderItem");
 const paymentRoute = require("./api/payment");
 const doctorRoute = require("./api/doctor");
+const chatOrderRoute = require("./api/chatOrder");
 const chatRoute = require("./api/chat");
 const messageRoute = require("./api/message");
 
@@ -32,6 +33,7 @@ app.use("/api/payment", paymentRoute);
 app.use("/api/doctor", doctorRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/message", messageRoute);
+app.use("/api/chat-order", chatOrderRoute);
 
 const server = app.listen(Port, () => {
   console.log(["Info"], `Server started on port ${Port}`);
@@ -44,7 +46,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`);
+  // console.log(`User connected: ${socket.id}`);
 
   socket.on("join_room", (data) => {
     socket.join(data);

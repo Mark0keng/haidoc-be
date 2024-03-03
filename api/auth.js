@@ -4,6 +4,7 @@ const Middleware = require("../middlewares/authMiddleware");
 const Validation = require("../helpers/validationHelper");
 const AuthHelper = require("../helpers/authHelper");
 const GeneralHelper = require("../helpers/generalHelper");
+const { decryptTextPayload } = require("../utils/decryptPayload");
 
 const getProfile = async (request, reply) => {
   try {
@@ -40,9 +41,12 @@ const register = async (request, reply) => {
 
 const login = async (request, reply) => {
   try {
-    Validation.loginValidation(request.body);
+    let { email, password } = request.body;
+    email = decryptTextPayload(email);
+    password = decryptTextPayload(password);
 
-    const { email, password } = request.body;
+    Validation.loginValidation({ email, password });
+
     const response = await AuthHelper.login({ email, password });
 
     return reply.send(response);
@@ -53,8 +57,40 @@ const login = async (request, reply) => {
   }
 };
 
+const getEmailForgotPassword = async (request, reply) => {
+  try {
+    Validation.forgotPasswordValidation(request.body);
+
+    const { email } = request.body;
+
+    const response = await AuthHelper.getEmailForgotPassword(email);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log(err);
+    return reply.status(500).send(GeneralHelper.errorResponse(err));
+  }
+};
+
+const changeForgotPassword = async (request, reply) => {
+  try {
+    Validation.changeForgotPasswordValidation(request.body);
+
+    const response = await AuthHelper.changeForgotPassword(request.body);
+
+    return reply.send(response);
+  } catch (err) {
+    console.log(err);
+    return reply
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
+  }
+};
+
 Router.get("/get-profile", getProfile);
 Router.post("/register", register);
 Router.post("/login", login);
+Router.post("/forgot-password", getEmailForgotPassword);
+Router.post("/forgot-password/change", changeForgotPassword);
 
 module.exports = Router;
