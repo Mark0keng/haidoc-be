@@ -14,6 +14,7 @@ const getOrderItem = async (query) => {
 const createOrderItem = async (orderItem) => {
   const result = await db.OrderItem.create({
     orderId: orderItem.orderId,
+    productId: orderItem.productId,
     productName: orderItem.productName,
     productPrice: orderItem.productPrice,
     count: orderItem.count,

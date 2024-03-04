@@ -56,7 +56,8 @@ const productValidation = (data) => {
     consumption: Joi.string().required(),
     packaging: Joi.string().required(),
     manufacture: Joi.string().required(),
-    categoryId: Joi.number().required(),
+    category: Joi.string().required(),
+    stock: Joi.number().required(),
     verifiedUser: Joi.object().required(),
   });
 
@@ -126,6 +127,7 @@ const orderValidation = (data) => {
 const orderItemValidation = (data) => {
   const schema = Joi.object({
     orderId: Joi.string().required(),
+    productId: Joi.number().required(),
     productName: Joi.string().required(),
     productPrice: Joi.number().required(),
     count: Joi.number().required(),

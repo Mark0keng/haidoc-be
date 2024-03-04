@@ -26,7 +26,7 @@ const getUserCart = async (query) => {
       {
         model: db.Product,
         as: "products",
-        attributes: ["imageUrl", "name", "price", "packaging"],
+        attributes: ["id", "imageUrl", "name", "price", "packaging", "stock"],
       },
     ],
   });

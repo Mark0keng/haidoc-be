@@ -6,6 +6,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 const Validation = require("../helpers/validationHelper");
 const CartHelper = require("../helpers/cartHelper");
+const ProductHelper = require("../helpers/productHelper");
 const GeneralHelper = require("../helpers/generalHelper");
 
 const getCart = async (req, res) => {
@@ -26,7 +27,6 @@ const getUserCart = async (req, res) => {
       userId: req.body.verifiedUser.id,
       ...req.query,
     });
-    console.log(data);
 
     return res.status(200).json({ message: "Successfully get data", data });
   } catch (err) {
@@ -50,8 +50,9 @@ const createCart = async (req, res) => {
 
     return res.status(200).json({ message: "Successfully create data", data });
   } catch (err) {
-    console.log(err);
-    return res.status(500).send(GeneralHelper.errorResponse(err));
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
   }
 };
 
@@ -59,17 +60,30 @@ const updateCart = async (req, res) => {
   try {
     const cart = await CartHelper.getCart(req.params);
     if (_.isEmpty(cart)) {
-      return Promise.reject(Boom.notFound("Item Not Found"));
+      throw Boom.notFound("Item Not Found");
     }
 
-    Validation.cartValidation(req.body);
+    const product = await ProductHelper.getProductById(cart?.productId);
+    console.log(req.body, "<<<<");
+    if (_.isEmpty(product)) {
+      throw Boom.notFound("Item Not Found");
+    }
+    if (product?.stock < req.body.count) {
+      throw Boom.badRequest("Over Stock");
+    }
+
+    Validation.cartValidation({
+      ...req.body,
+      userId: req.body.verifiedUser.id,
+    });
 
     const data = await CartHelper.updateCart(req.body, req.params.id);
 
     return res.status(200).json({ message: "Successfully create data", data });
   } catch (err) {
-    console.log(err);
-    return res.status(500).send(GeneralHelper.errorResponse(err));
+    return res
+      .status(err.output.statusCode)
+      .send(GeneralHelper.errorResponse(err));
   }
 };
 
@@ -77,7 +91,7 @@ const deleteCart = async (req, res) => {
   try {
     const cart = await CartHelper.getCart(req.params);
     if (_.isEmpty(cart)) {
-      return Promise.reject(Boom.notFound("Item Not Found"));
+      throw Boom.notFound("Item Not Found");
     }
 
     await CartHelper.deleteCart(req.params.id);

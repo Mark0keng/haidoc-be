@@ -34,7 +34,10 @@ module.exports = {
       imageUrl: {
         type: Sequelize.STRING,
       },
-      categoryId: {
+      category: {
+        type: Sequelize.STRING,
+      },
+      stock: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

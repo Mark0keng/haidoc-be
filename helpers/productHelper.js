@@ -26,8 +26,12 @@ const getAllProduct = async (query) => {
 };
 
 const getProductById = async (id) => {
-  const result = await db.Product.findOne({
-    where: { id },
+  const result = await db.sequelize.transaction(async (t) => {
+    const product = await db.Product.findOne({
+      where: { id },
+    });
+
+    return product;
   });
 
   if (_.isEmpty(result)) {
@@ -47,27 +51,36 @@ const createProduct = async (product) => {
     packaging: product?.packaging,
     manufacture: product?.manufacture,
     imageUrl: product?.imageUrl,
-    categoryId: product?.categoryId,
+    category: product?.category,
+    stock: product?.stock,
   });
 
   return Promise.resolve(result);
 };
 
 const updateProduct = async (product, id) => {
-  await db.Product.update(
-    {
-      name: product?.name,
-      price: product?.price,
-      description: product?.description,
-      concern: product?.concern,
-      consumption: product?.consumption,
-      packaging: product?.packaging,
-      manufacture: product?.manufacture,
-      imageUrl: product?.imageUrl && product.imageUrl,
-      categoryId: product?.categoryId,
-    },
-    { where: { id } }
-  );
+  const result = await sequelize.transaction(async (t) => {
+    const productData = await db.Product.update(
+      {
+        name: product?.name,
+        price: product?.price,
+        description: product?.description,
+        concern: product?.concern,
+        consumption: product?.consumption,
+        packaging: product?.packaging,
+        manufacture: product?.manufacture,
+        imageUrl: product?.imageUrl && product.imageUrl,
+        category: product?.category,
+        stock: product?.stock,
+      },
+      { where: { id } },
+      { transaction: t }
+    );
+
+    return productData;
+  });
+
+  return Promise.resolve(result);
 };
 
 const deleteProduct = async (id) => {
