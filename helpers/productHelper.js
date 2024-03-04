@@ -12,6 +12,9 @@ const getAllProduct = async (query) => {
       ...(query?.name && {
         name: { [Op.like]: `%${query.name}%` },
       }),
+      ...(query?.category && {
+        category: query.category,
+      }),
     },
     limit: query.limit && Number(query.limit),
     offset: query.page && Number(query.page) * Number(query.limit),
