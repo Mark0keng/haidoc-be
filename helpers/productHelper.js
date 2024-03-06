@@ -62,26 +62,21 @@ const createProduct = async (product) => {
 };
 
 const updateProduct = async (product, id) => {
-  const result = await sequelize.transaction(async (t) => {
-    const productData = await db.Product.update(
-      {
-        name: product?.name,
-        price: product?.price,
-        description: product?.description,
-        concern: product?.concern,
-        consumption: product?.consumption,
-        packaging: product?.packaging,
-        manufacture: product?.manufacture,
-        imageUrl: product?.imageUrl && product.imageUrl,
-        category: product?.category,
-        stock: product?.stock,
-      },
-      { where: { id } },
-      { transaction: t }
-    );
-
-    return productData;
-  });
+  const result = await db.Product.update(
+    {
+      name: product?.name,
+      price: product?.price,
+      description: product?.description,
+      concern: product?.concern,
+      consumption: product?.consumption,
+      packaging: product?.packaging,
+      manufacture: product?.manufacture,
+      imageUrl: product?.imageUrl && product.imageUrl,
+      category: product?.category,
+      stock: product?.stock,
+    },
+    { where: { id } }
+  );
 
   return Promise.resolve(result);
 };

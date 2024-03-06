@@ -29,6 +29,7 @@ const getProductById = async (req, res) => {
 
     return res.status(200).json({ message: "Successfully get data", data });
   } catch (err) {
+    console.log(err);
     return res
       .status(err.output.statusCode)
       .send(GeneralHelper.errorResponse(err));
@@ -91,12 +92,14 @@ const updateProduct = async (req, res) => {
 
     Validation.productValidation(req.body);
 
-    await ProductHelper.updateProduct(
+    const data = await ProductHelper.updateProduct(
       { ...req.body, imageUrl: imageResult?.url },
       req.params.id
     );
 
-    return res.status(200).json("Product successfully updated");
+    return res
+      .status(200)
+      .json({ message: "Product successfully updated", data });
   } catch (err) {
     return res
       .status(GeneralHelper.statusResponse(err))
@@ -106,11 +109,12 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    await ProductHelper.deleteProduct(req.params.id);
+    const data = await ProductHelper.deleteProduct(req.params.id);
 
-    return res.status(200).json("Product successfully deleted");
+    return res
+      .status(200)
+      .json({ message: "Product Successfully Deleted", data });
   } catch (err) {
-    console.log(err);
     return res
       .status(GeneralHelper.statusResponse(err))
       .send(GeneralHelper.errorResponse(err));

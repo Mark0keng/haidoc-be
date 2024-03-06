@@ -18,6 +18,7 @@ let getAllProduct;
 let getProductDetail;
 let createProduct;
 let updateProduct;
+let deleteProduct;
 
 let bearerTokenAdmin =
   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6MywiaWF0IjoxNzA5MjgwODY2LCJleHAiOjE3MTAxNDQ4NjZ9.Do2ggD3ZasJCvPgi7Iq6_81-07VW441FfwdyS6OMvKk";
@@ -98,7 +99,8 @@ describe("Product", () => {
         consumption: "Konsumsi secukupnya",
         packaging: "per Sachet",
         manufacture: "Sido Muncul",
-        categoryId: 1,
+        category: "Obat Masuk Angin",
+        stock: 10,
       };
       createProduct = jest.spyOn(db.Product, "create");
     });
@@ -119,8 +121,9 @@ describe("Product", () => {
         .field("consumption", payload.consumption)
         .field("packaging", payload.packaging)
         .field("manufacture", payload.manufacture)
-        .field("categoryId", payload.categoryId)
         .attach("imageUrl", imageUrl)
+        .field("category", payload.category)
+        .field("stock", payload.stock)
         .expect(201)
         .then((res) => {
           expect(res.body.data).toBeTruthy();
@@ -150,8 +153,9 @@ describe("Product", () => {
         .field("consumption", payload.consumption)
         .field("packaging", payload.packaging)
         .field("manufacture", payload.manufacture)
-        .field("categoryId", payload.categoryId)
         .attach("imageUrl", imageUrl)
+        .field("category", payload.category)
+        .field("stock", payload.stock)
         .expect(401)
         .then((res) => {
           expect(res.body.error).toBe("Unauthorized");
@@ -171,11 +175,11 @@ describe("Product", () => {
         .field("consumption", payload.consumption)
         .field("packaging", payload.packaging)
         .field("manufacture", payload.manufacture)
-        .field("categoryId", payload.categoryId)
         .attach("imageUrl", imageUrl)
+        .field("category", payload.category)
+        .field("stock", payload.stock)
         .expect(403)
         .then((res) => {
-          console.log(res.body);
           expect(res.body.error).toBe("Forbidden");
         });
     });
@@ -193,7 +197,8 @@ describe("Product", () => {
         consumption: "Konsumsi secukupnya",
         packaging: "per Sachet",
         manufacture: "Sido Muncul",
-        categoryId: 1,
+        category: "Obat Masuk Angin",
+        stock: 10,
       };
 
       mockProductDetail = _.cloneDeep(productDetailData);
@@ -207,7 +212,7 @@ describe("Product", () => {
       });
 
       await request(server)
-        .post(`${apiUrl}/15`)
+        .put(`${apiUrl}/15`)
         .set("Authorization", bearerTokenAdmin)
         .field("name", payload.name)
         .field("price", payload.price)
@@ -216,11 +221,36 @@ describe("Product", () => {
         .field("consumption", payload.consumption)
         .field("packaging", payload.packaging)
         .field("manufacture", payload.manufacture)
-        .field("categoryId", payload.categoryId)
         .attach("imageUrl", imageUrl)
-        .expect(201)
+        .field("category", payload.category)
+        .field("stock", payload.stock)
+        .expect(200)
         .then((res) => {
           expect(res.body.message).toBe("Product Succesfully Updated");
+          expect(res.body.data).toBeTruthy();
+        });
+    });
+  });
+
+  describe("DELETE Delete Product", () => {
+    beforeEach(() => {
+      apiUrl = "/product/delete";
+      deleteProduct = jest.spyOn(db.Product, "destroy");
+    });
+
+    test("Should Return 200: DELETE Delete Product Success", async () => {
+      deleteProduct.mockResolvedValue("Success");
+      mockUploadToCloudinary.mockResolvedValue({
+        url: "/example-url/image.jpg",
+      });
+
+      await request(server)
+        .delete(`${apiUrl}/15`)
+        .set("Authorization", bearerTokenAdmin)
+        // .expect(200)
+        .then((res) => {
+          console.log(res.body);
+          expect(res.body.message).toBe("Product Successfully Deleted");
           expect(res.body.data).toBeTruthy();
         });
     });

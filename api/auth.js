@@ -41,13 +41,13 @@ const register = async (request, reply) => {
 
 const login = async (request, reply) => {
   try {
-    let { email, password } = request.body;
-    email = decryptTextPayload(email);
+    let { credential, password } = request.body;
+    credential = decryptTextPayload(credential);
     password = decryptTextPayload(password);
 
-    Validation.loginValidation({ email, password });
+    Validation.loginValidation({ credential, password });
 
-    const response = await AuthHelper.login({ email, password });
+    const response = await AuthHelper.login({ credential, password });
 
     return reply.send(response);
   } catch (err) {

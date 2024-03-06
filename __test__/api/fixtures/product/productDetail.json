@@ -8,7 +8,8 @@
   "packaging": "Blister @ 10 kapsul",
   "manufacture": "PT Prima Medika Laboratories",
   "imageUrl": "http://res.cloudinary.com/dfbcal2eb/image/upload/v1708442667/ey1hgm7zyupbrrfstx91.png",
-  "categoryId": 0,
+  "category": "Obat Masuk Angin",
+  "stock": 10,
   "createdAt": "2024-02-20T15:24:28.000Z",
   "updatedAt": "2024-02-20T15:24:28.000Z"
 }

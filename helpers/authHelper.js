@@ -8,6 +8,7 @@ const db = require("../models");
 const { sendEmail } = require("../utils/nodemailer");
 const GeneralHelper = require("../helpers/generalHelper");
 const { decryptTextPayload } = require("../utils/decryptPayload");
+const { Op } = require("sequelize");
 
 const jwtSecretToken = process.env.JWT_SECRET_TOKEN || "super_strong_key";
 const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "24h";
@@ -46,11 +47,21 @@ const registerUser = async (dataObject) => {
 };
 
 const login = async (dataObject) => {
-  let { email, password } = dataObject;
+  let { credential, password } = dataObject;
+  console.log(credential);
 
   try {
     const user = await db.User.findOne({
-      where: { email },
+      where: {
+        [Op.or]: [
+          {
+            email: credential,
+          },
+          {
+            username: credential,
+          },
+        ],
+      },
     });
 
     if (_.isEmpty(user)) {

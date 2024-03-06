@@ -28,17 +28,6 @@ const getUserOrder = async (query) => {
 const createOrder = async (order) => {
   try {
     const result = await db.sequelize.transaction(async (t) => {
-      const orderData = await db.Order.create(
-        {
-          orderId: order.orderId,
-          grossAmount: order.grossAmount,
-          shippingCost: order.shippingCost,
-          userId: order.userId,
-          status: order.status,
-        },
-        { transaction: t }
-      );
-
       const cart = await db.Cart.findAll(
         {
           where: {
@@ -86,6 +75,17 @@ const createOrder = async (order) => {
           { transaction: t }
         );
       }
+
+      const orderData = await db.Order.create(
+        {
+          orderId: order.orderId,
+          grossAmount: order.grossAmount,
+          shippingCost: order.shippingCost,
+          userId: order.userId,
+          status: order.status,
+        },
+        { transaction: t }
+      );
 
       return orderData;
     });
