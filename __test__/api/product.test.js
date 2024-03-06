@@ -212,7 +212,7 @@ describe("Product", () => {
       });
 
       await request(server)
-        .put(`${apiUrl}/15`)
+        .put(`${apiUrl}/14`)
         .set("Authorization", bearerTokenAdmin)
         .field("name", payload.name)
         .field("price", payload.price)
@@ -226,7 +226,7 @@ describe("Product", () => {
         .field("stock", payload.stock)
         .expect(200)
         .then((res) => {
-          expect(res.body.message).toBe("Product Succesfully Updated");
+          expect(res.body.message).toBe("Product successfully updated");
           expect(res.body.data).toBeTruthy();
         });
     });
@@ -247,7 +247,7 @@ describe("Product", () => {
       await request(server)
         .delete(`${apiUrl}/15`)
         .set("Authorization", bearerTokenAdmin)
-        // .expect(200)
+        .expect(200)
         .then((res) => {
           console.log(res.body);
           expect(res.body.message).toBe("Product Successfully Deleted");

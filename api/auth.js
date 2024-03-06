@@ -20,9 +20,15 @@ const getProfile = async (request, reply) => {
 
 const register = async (request, reply) => {
   try {
-    Validation.registerValidation(request.body);
+    let { username, email, password, role } = request.body;
 
-    const { username, email, password, role } = request.body;
+    username = decryptTextPayload(username);
+    email = decryptTextPayload(email);
+    password = decryptTextPayload(password);
+    role = decryptTextPayload(role);
+
+    Validation.registerValidation({ username, email, password, role });
+
     const response = await AuthHelper.registerUser({
       username,
       email,

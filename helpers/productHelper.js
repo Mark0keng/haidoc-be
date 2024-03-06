@@ -94,7 +94,9 @@ const deleteProduct = async (id) => {
     await cloudinaryDeleteImg(publicId, "image");
   }
 
-  await db.Product.destroy({ where: { id } });
+  const result = await db.Product.destroy({ where: { id } });
+
+  return Promise.resolve(result);
 };
 
 module.exports = {
